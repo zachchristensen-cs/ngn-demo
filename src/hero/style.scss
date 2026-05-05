@@ -7,16 +7,20 @@
 	color: #fff;
 	margin-bottom: clamp(1.5rem, 4vw, 3rem) !important;
 	// Breakout that defeats nested constrained layouts (where multiple
-	// wp-block-group ancestors each add padding/margin) without using
-	// `100vw`, which on browsers that reserve scrollbar gutter overflows
-	// the viewport and produces a horizontal scrollbar.
-	// `width: 100%` + symmetric negative margins to `calc(50% - 50vw)`
-	// re-anchors the element to the viewport edges. We keep the page-
-	// scrollbar gutter reserved with `scrollbar-gutter: stable` on the
-	// document root (set globally by the theme) so the math is exact;
-	// fall back to `max-width: 100%` to clip any rounding overflow.
-	width: 100% !important;
-	max-width: 100% !important;
+	// wp-block-group ancestors each add padding/margin) AND parents that
+	// aren't centered. Earlier attempts:
+	//   1. `width: 100vw` alone → overflowed past the page scrollbar
+	//      and added a horizontal scrollbar.
+	//   2. `width: 100%; margin: 0 calc(50% - 50vw)` → only reaches the
+	//      viewport edges when the parent is centered. Themes whose
+	//      content area sits off-center (e.g. with a sidebar) leave a
+	//      gap on one side.
+	// The current approach: `100vw` width + negative margin pulls the
+	// element's left edge to viewport 0 regardless of parent position,
+	// and `overflow-x: clip` on the body (scoped via has-hero-block
+	// further down) prevents the page scrollbar.
+	width: 100vw !important;
+	max-width: 100vw !important;
 	margin-left: calc(50% - 50vw) !important;
 	margin-right: calc(50% - 50vw) !important;
 	box-sizing: border-box;
@@ -118,6 +122,14 @@
  *   - the Post Content block's default top spacing
  */
 body.has-hero-block {
+	// Prevent the 100vw hero from creating a horizontal scrollbar on
+	// browsers that reserve a page scrollbar gutter (i.e. the actual
+	// usable viewport is narrower than 100vw by the scrollbar's width).
+	// `clip` is preferred over `hidden` here — `hidden` creates a new
+	// scroll container, which can break sticky positioning further down
+	// the page; `clip` just suppresses overflow without that side effect.
+	overflow-x: clip;
+
 	// Float the theme's site header over the hero so the nav reads as
 	// part of the hero. The header is rendered by the theme's template
 	// part (outside this block's DOM), so we reach it via a body-scoped

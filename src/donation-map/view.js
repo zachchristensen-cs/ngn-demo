@@ -441,26 +441,10 @@ function DonationMapInteractive( {
 		};
 	}, [ setVb ] );
 
-	// Esc closes the info card and restores focus to the originating pin.
-	useEffect( () => {
-		const onKey = ( e ) => {
-			if ( e.key === 'Escape' && selectedPinId ) {
-				closeCard();
-			}
-		};
-		document.addEventListener( 'keydown', onKey );
-		return () => document.removeEventListener( 'keydown', onKey );
-	}, [ selectedPinId, closeCard ] );
-
-	// Button actions
-	const zoomIn = () =>
-		setVb( ( curr ) => zoomVB( curr, 0.7, 0.5, 0.5 ) );
-	const zoomOut = () =>
-		setVb( ( curr ) => zoomVB( curr, 1.4, 0.5, 0.5 ) );
-	const goRange = () => animateVb( parseVB( RANGE_VIEWBOX ) );
-	const goDonations = () =>
-		animateVb( parseVB( DONATIONS_VIEWBOX ) );
-
+	// closeCard / onPinActivate must be declared *before* the Esc handler
+	// effect — the effect lists `closeCard` in its dep array and would hit
+	// a TDZ ReferenceError if the const wasn't initialized yet by the time
+	// the function body's let/const declarations are evaluated top to bottom.
 	const onPinActivate = ( pinId ) => {
 		setSelectedPinId( ( curr ) => {
 			const opening = curr !== pinId;
@@ -492,6 +476,26 @@ function DonationMapInteractive( {
 			cardCloseButtonRef.current.focus();
 		}
 	}, [ selectedPinId ] );
+
+	// Esc closes the info card and restores focus to the originating pin.
+	useEffect( () => {
+		const onKey = ( e ) => {
+			if ( e.key === 'Escape' && selectedPinId ) {
+				closeCard();
+			}
+		};
+		document.addEventListener( 'keydown', onKey );
+		return () => document.removeEventListener( 'keydown', onKey );
+	}, [ selectedPinId, closeCard ] );
+
+	// Button actions
+	const zoomIn = () =>
+		setVb( ( curr ) => zoomVB( curr, 0.7, 0.5, 0.5 ) );
+	const zoomOut = () =>
+		setVb( ( curr ) => zoomVB( curr, 1.4, 0.5, 0.5 ) );
+	const goRange = () => animateVb( parseVB( RANGE_VIEWBOX ) );
+	const goDonations = () =>
+		animateVb( parseVB( DONATIONS_VIEWBOX ) );
 
 	const pinR = vb[ 2 ] / PIN_DIVISOR;
 	const selectedPin =
