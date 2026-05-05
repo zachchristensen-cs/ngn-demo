@@ -1,0 +1,386 @@
+@use "../_shared/brand-tokens";
+
+.donation-map {
+	position: relative;
+	max-width: 800px;
+	margin: var(--ngn-space-xl) auto var(--ngn-space-2xl);
+	padding: var(--ngn-space-xl) var(--ngn-space-xl) var(--ngn-space-md);
+	background-color: var(--ngn-bg-tint-warm);
+	border: 1px solid rgba(0, 0, 0, 0.08);
+	border-radius: 12px;
+	font-family: var(--ngn-font-body);
+	color: var(--ngn-text-primary);
+
+	// Subtle 96px grid that softly fades toward the edges via a radial mask,
+	// so the texture sits in the background without competing with the map.
+	&::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background-image:
+			linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+		background-size: 48px 48px;
+		mask-image: radial-gradient(
+			ellipse at center,
+			#000 10%,
+			transparent 80%
+		);
+		-webkit-mask-image: radial-gradient(
+			ellipse at center,
+			#000 10%,
+			transparent 80%
+		);
+		border-radius: inherit;
+		pointer-events: none;
+		z-index: 0;
+	}
+
+	&__toolbar {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		gap: var(--ngn-space-xs);
+		margin-bottom: var(--ngn-space-md);
+	}
+
+	&__zoom-group {
+		display: inline-flex;
+		border: 1px solid var(--ngn-border-strong);
+		border-radius: var(--ngn-radius-sm);
+		overflow: hidden;
+	}
+
+	&__zoom-btn {
+		appearance: none;
+		width: 32px;
+		height: 32px;
+		padding: 0;
+		font: inherit;
+		font-size: 1rem;
+		font-weight: 600;
+		line-height: 1;
+		color: var(--ngn-text-primary);
+		background: var(--ngn-bg-primary);
+		border: none;
+		cursor: pointer;
+		transition: background-color 150ms ease;
+
+		& + & {
+			border-left: 1px solid var(--ngn-border-strong);
+		}
+
+		&:hover {
+			background: var(--ngn-bg-tint);
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--ngn-red);
+			outline-offset: -2px;
+		}
+	}
+
+	&__toggle {
+		appearance: none;
+		padding: 0.4rem 0.875rem;
+		font: inherit;
+		font-size: var(--ngn-caption-size);
+		font-weight: 600;
+		color: var(--ngn-text-primary);
+		background: transparent;
+		border: 1px solid var(--ngn-border-strong);
+		border-radius: 999px;
+		cursor: pointer;
+		transition:
+			background-color 150ms ease,
+			color 150ms ease,
+			border-color 150ms ease;
+
+		&:hover {
+			border-color: var(--ngn-text-primary);
+		}
+
+		&.is-active {
+			background: var(--ngn-text-primary);
+			color: var(--ngn-white);
+			border-color: var(--ngn-text-primary);
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--ngn-red);
+			outline-offset: 2px;
+		}
+	}
+
+	&__svg-container {
+		position: relative;
+		width: 100%;
+		aspect-ratio: 800 / 988;
+		// No own bg/radius — the parent .donation-map card provides both.
+		// Coastline draws directly on the warm card surface.
+		overflow: hidden;
+		cursor: grab;
+		touch-action: none;
+
+		&[data-panning="true"] {
+			cursor: grabbing;
+		}
+	}
+
+	&__zoom-hint {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%) scale(0.96);
+		padding: 0.5rem 0.875rem;
+		background: rgba(0, 0, 0, 0.7);
+		color: var(--ngn-white);
+		font-size: var(--ngn-small-size);
+		font-weight: 600;
+		border-radius: 999px;
+		pointer-events: none;
+		opacity: 0;
+		transition:
+			opacity 160ms ease,
+			transform 160ms ease;
+		z-index: 5;
+
+		&[data-visible="true"] {
+			opacity: 1;
+			transform: translate(-50%, -50%) scale(1);
+		}
+	}
+
+	&__svg {
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+
+	&__coast {
+		stroke: var(--ngn-text-secondary);
+		stroke-width: 1;
+		fill: none;
+		stroke-linejoin: miter;
+		stroke-linecap: butt;
+		// Keep stroke at a consistent screen-pixel width regardless of
+		// container size or zoom level — coastline reads consistently
+		// at any scale.
+		vector-effect: non-scaling-stroke;
+	}
+
+	&__landmarks {
+		transition: opacity 400ms ease;
+
+		&[data-faded="true"] {
+			opacity: 0;
+		}
+	}
+
+	&__landmark {
+		font-family: var(--ngn-font-body);
+		font-size: 11px;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		fill: var(--ngn-text-muted);
+	}
+
+	&__pin {
+		cursor: pointer;
+		outline: none;
+
+		// Halo is always visible at low opacity — gives every pin a
+		// soft black aura that increases its visual + touch target
+		// without the harsh contrast of a white stroke.
+		&-halo {
+			fill: var(--ngn-text-primary);
+			opacity: 0.18;
+			transition:
+				opacity 200ms ease,
+				fill 200ms ease;
+		}
+
+		&-dot {
+			fill: var(--ngn-text-primary);
+			transition:
+				r 400ms cubic-bezier(0.4, 0, 0.2, 1),
+				fill 200ms ease;
+		}
+
+		&:hover &-halo,
+		&:focus-visible &-halo {
+			opacity: 0.32;
+		}
+
+		&:focus-visible &-dot {
+			fill: var(--ngn-red);
+		}
+
+		&.is-selected &-dot {
+			fill: var(--ngn-red);
+		}
+
+		&.is-selected &-halo {
+			fill: var(--ngn-red);
+			opacity: 0.28;
+		}
+
+		&.is-placeholder &-dot {
+			fill: none;
+			stroke: var(--ngn-text-tint);
+			stroke-width: 1.25;
+			stroke-dasharray: 2 2;
+		}
+
+		&.is-placeholder &-halo {
+			opacity: 0.08;
+		}
+	}
+
+	&__card {
+		position: absolute;
+		width: 260px;
+		padding: var(--ngn-space-md);
+		background: var(--ngn-white);
+		border: 1px solid var(--ngn-border-default);
+		border-radius: var(--ngn-radius-md);
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+		font-size: var(--ngn-small-size);
+		z-index: 2;
+		animation: donation-map-card-in 200ms ease-out;
+	}
+
+	&__card-close {
+		position: absolute;
+		top: 0.375rem;
+		right: 0.5rem;
+		width: 1.5rem;
+		height: 1.5rem;
+		padding: 0;
+		background: transparent;
+		border: none;
+		color: var(--ngn-text-muted);
+		font-size: 1.125rem;
+		line-height: 1;
+		cursor: pointer;
+
+		&:hover {
+			color: var(--ngn-text-primary);
+		}
+	}
+
+	&__card-name {
+		font-family: var(--ngn-font-heading);
+		font-size: 1.125rem;
+		font-weight: 700;
+		line-height: 1.2;
+		color: var(--ngn-text-primary);
+		padding-right: 1.5rem;
+	}
+
+	&__card-type {
+		margin-top: 0.125rem;
+		font-size: var(--ngn-small-size);
+		font-weight: 600;
+		color: var(--ngn-text-muted);
+	}
+
+	&__card-image {
+		margin: var(--ngn-space-sm) 0 var(--ngn-space-sm);
+		background: var(--ngn-border-subtle);
+
+		img {
+			display: block;
+			width: 100%;
+			height: 140px;
+			object-fit: cover;
+			border-radius: 0; // brand: squared image corners
+		}
+	}
+
+	&__card-meta {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: 0.25rem var(--ngn-space-sm);
+		margin: var(--ngn-space-sm) 0 0;
+		font-size: var(--ngn-small-size);
+		line-height: 1.4;
+
+		dt {
+			font-weight: 700;
+			color: var(--ngn-text-primary);
+		}
+
+		dd {
+			margin: 0;
+			color: var(--ngn-text-secondary);
+		}
+	}
+
+	&__pin-list {
+		margin: 0;
+		padding: 0 0 0 var(--ngn-space-md);
+		font-size: var(--ngn-small-size);
+		line-height: 1.5;
+		color: var(--ngn-text-primary);
+	}
+
+	&__note {
+		margin-top: var(--ngn-space-md);
+		font-size: var(--ngn-caption-size);
+		font-style: italic;
+		line-height: 1.5;
+		color: var(--ngn-text-muted);
+	}
+
+	@media (max-width: 600px) {
+		// Toolbar inherits desktop styles: right-aligned (justify-content:
+		// flex-end) with margin-bottom for breathing room above the SVG.
+		// The previous mobile override flipped it to flex-start and set
+		// order: 2 — but the parent isn't a flex container so order had
+		// no effect, leaving the toolbar squished left-aligned at the top.
+
+		&__svg-container {
+			aspect-ratio: 4 / 5;
+			max-height: 520px;
+		}
+
+		// Mobile: info card becomes a bottom sheet anchored to the SVG container
+		&__card {
+			position: absolute;
+			top: auto !important;
+			bottom: 0;
+			left: 0 !important;
+			right: 0;
+			width: auto;
+			transform: none !important;
+			border-radius: 0;
+			border-left: none;
+			border-right: none;
+			border-bottom: none;
+			animation: donation-map-card-in-mobile 220ms ease-out;
+		}
+	}
+}
+
+@keyframes donation-map-card-in {
+	from {
+		opacity: 0;
+		transform: translate(12px, calc(-50% + 4px));
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes donation-map-card-in-mobile {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

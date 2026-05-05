@@ -1,0 +1,62 @@
+/*
+ * NGN brand tokens — single source of truth for every block.
+ *
+ * See ngn-brand-styling/SKILL.md for the canonical brand system. Each block's
+ * style.scss should `@use` this partial instead of redefining the tokens
+ * inline; otherwise drift across blocks becomes a guaranteed slow leak.
+ *
+ * The tokens land on `:root` so blocks can reference them as plain
+ * `var(--ngn-*)` calls without needing a SCSS namespace.
+ */
+
+:root {
+	// Brand colors
+	--ngn-black: #000000;
+	--ngn-white: #ffffff;
+	--ngn-red: #c8102e;
+	--ngn-red-dark: #a00d24;
+	--ngn-gold: #a4804a;
+
+	// Editorial neutrals
+	--ngn-text-primary: #1a1a1a;
+	--ngn-text-secondary: #4a4a4a;
+	--ngn-text-muted: #6b6b6b;
+	--ngn-text-tint: #9a9a9a;
+	--ngn-bg-primary: #ffffff;
+	--ngn-bg-tint: #f7f7f7;
+	--ngn-bg-tint-warm: #faf9f7;
+	--ngn-border-default: #e5e5e5;
+	--ngn-border-strong: #d0d0d0;
+	--ngn-border-subtle: #f0f0f0;
+	--ngn-link: var(--ngn-red);
+	--ngn-link-hover: var(--ngn-red-dark);
+
+	// Type
+	--ngn-font-heading: "ff-real", "Real Head Pro", "Lato", system-ui,
+		-apple-system, sans-serif;
+	--ngn-font-body: "ff-real", "Real Head Pro", "Lato", system-ui,
+		-apple-system, sans-serif;
+	--ngn-h2-size: 1.5rem;
+	--ngn-h2-size-lg: 1.75rem;
+	--ngn-h3-size: 1.25rem;
+	--ngn-body-size: 1.0625rem;
+	--ngn-small-size: 0.875rem;
+	--ngn-caption-size: 0.8125rem;
+	--ngn-eyebrow-size: 0.875rem;
+	--ngn-eyebrow-letter-spacing: 0.125em;
+
+	// Spacing
+	--ngn-space-xs: 0.25rem;
+	--ngn-space-sm: 0.5rem;
+	--ngn-space-md: 1rem;
+	--ngn-space-lg: 1.5rem;
+	--ngn-space-xl: 2rem;
+	--ngn-space-2xl: 3rem;
+
+	// Layout
+	--ngn-content-width: 720px;
+
+	// Shape
+	--ngn-radius-sm: 2px;
+	--ngn-radius-md: 4px;
+}

@@ -1,0 +1,127 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "ngn/donation-map",
+  "version": "0.1.0",
+  "title": "Donation Map",
+  "category": "widgets",
+  "icon": "smiley",
+  "description": "Editorial map showing the East Coast lobster range with pinned donation origins on the Massachusetts North Shore.",
+  "example": {
+    "attributes": {
+      "defaultViewBox": "0 0 800 988",
+      "pins": [
+        {
+          "id": "ex-1",
+          "lobsterName": "Neptune",
+          "lobsterType": "Electric Blue",
+          "locationName": "Salem, MA",
+          "svgX": 214,
+          "svgY": 660,
+          "donor": "",
+          "donorBusiness": "",
+          "donationDate": "",
+          "rarity": "1 in 2 million",
+          "imageUrl": "",
+          "imageAlt": "",
+          "isPlaceholder": false
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "pins": {
+      "type": "array",
+      "default": [
+        {
+          "id": "pin-1",
+          "lobsterName": "Neptune",
+          "lobsterType": "Electric Blue",
+          "locationName": "Salem, MA",
+          "svgX": 214,
+          "svgY": 660,
+          "donor": "Brad Myslinski",
+          "donorBusiness": "Sophia & Emma",
+          "donationDate": "July 2025",
+          "rarity": "1 in 2 million",
+          "imageUrl": "",
+          "imageAlt": "",
+          "isPlaceholder": false
+        },
+        {
+          "id": "pin-2",
+          "lobsterName": "Jackie",
+          "lobsterType": "Calico",
+          "locationName": "Nahant, MA",
+          "svgX": 214,
+          "svgY": 664,
+          "donor": "Mike 'Tuffy' Tufts",
+          "donorBusiness": "Veteran lobster captain",
+          "donationDate": "October 2025",
+          "rarity": "1 in 30 million",
+          "imageUrl": "",
+          "imageAlt": "",
+          "isPlaceholder": false
+        },
+        {
+          "id": "pin-3",
+          "lobsterName": "Joseph",
+          "lobsterType": "Cotton Candy Claws",
+          "locationName": "Marblehead, MA",
+          "svgX": 215,
+          "svgY": 660,
+          "donor": "Kevin Wolff",
+          "donorBusiness": "Little Harbor Lobster Co.",
+          "donationDate": "November 2025",
+          "rarity": "1 in 100 million",
+          "imageUrl": "",
+          "imageAlt": "",
+          "isPlaceholder": false
+        },
+        {
+          "id": "pin-4",
+          "lobsterName": "Awaiting fourth lobster",
+          "lobsterType": "",
+          "locationName": "Nahant, MA — Marine Science Center",
+          "svgX": 213,
+          "svgY": 664,
+          "donor": "",
+          "donorBusiness": "",
+          "donationDate": "",
+          "rarity": "Awaiting fourth lobster",
+          "imageUrl": "",
+          "imageAlt": "",
+          "isPlaceholder": true
+        }
+      ]
+    },
+    "rangeNote": {
+      "type": "string",
+      "default": "American lobsters range from Cape Hatteras, North Carolina to Labrador, Canada — with New England having the highest concentration. (Source: NOAA)"
+    },
+    "defaultViewBox": {
+      "type": "string",
+      "default": "200 645 90 25"
+    },
+    "mapImageId": {
+      "type": "number"
+    },
+    "mapImageUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "mapImageAlt": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "supports": {
+    "html": false
+  },
+  "textdomain": "ngn-demo",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php",
+  "viewScript": "file:./view.js"
+}

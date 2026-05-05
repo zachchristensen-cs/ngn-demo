@@ -1,0 +1,166 @@
+.donation-map[data-static-preview="true"] {
+	// Override frontend pan/zoom affordances — editor needs the block to be
+	// click-selectable, which means a normal cursor and unblocked touch events.
+	.donation-map__svg-container {
+		cursor: default;
+		touch-action: auto;
+	}
+
+	// The frontend toolbar (zoom buttons) doesn't apply in the static editor
+	// preview — hide it so editors only see the configurable block contents.
+	.donation-map__toolbar {
+		display: none;
+	}
+
+	.donation-map__pin {
+		// Click-to-preview works in editor; suppress focus ring chrome
+		&:focus-visible .donation-map__pin-dot {
+			stroke: var(--ngn-red);
+			stroke-width: 2;
+		}
+	}
+
+	.donation-map__card {
+		// No animation in static editor preview
+		animation: none;
+	}
+}
+
+.donation-map-hint {
+	margin: 0 0 var(--ngn-space-sm);
+	font-size: 0.75rem;
+	font-style: italic;
+	color: var(--ngn-text-muted);
+}
+
+.donation-map-bg__controls {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: var(--ngn-space-xs);
+	margin-bottom: var(--ngn-space-sm);
+}
+
+.donation-map-vb-presets {
+	display: flex;
+	gap: var(--ngn-space-xs);
+	margin-bottom: var(--ngn-space-sm);
+
+	> * {
+		flex: 1;
+	}
+}
+
+.donation-map-vb-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: var(--ngn-space-xs);
+	margin-bottom: var(--ngn-space-sm);
+}
+
+.donation-map-pin-row__image {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ngn-space-xs);
+	margin-top: var(--ngn-space-xs);
+
+	&-button,
+	&-placeholder {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		min-height: 110px;
+		padding: 0;
+		background: var(--ngn-bg-primary);
+		border: 1px dashed var(--ngn-border-strong);
+		border-radius: var(--ngn-radius-sm);
+		color: var(--ngn-text-muted);
+		font-size: var(--ngn-caption-size);
+		cursor: pointer;
+
+		&:hover {
+			border-color: var(--ngn-text-muted);
+			color: var(--ngn-text-primary);
+		}
+	}
+
+	&-button {
+		border-style: solid;
+		padding: 0;
+
+		img {
+			display: block;
+			width: 100%;
+			height: 110px;
+			object-fit: cover;
+		}
+	}
+
+	&-replace {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(0, 0, 0, 0.55);
+		color: var(--ngn-white);
+		font-size: var(--ngn-caption-size);
+		font-weight: 700;
+		opacity: 0;
+		transition: opacity 0.15s ease;
+	}
+
+	&-button:hover &-replace {
+		opacity: 1;
+	}
+}
+
+.donation-map-pin-row {
+	margin-bottom: var(--ngn-space-sm);
+	border: 1px solid var(--ngn-border-default);
+	border-radius: var(--ngn-radius-sm);
+
+	&__head {
+		display: flex;
+		align-items: center;
+		gap: var(--ngn-space-xs);
+		padding: 0.375rem 0.5rem;
+		background: var(--ngn-bg-tint);
+	}
+
+	&__toggle {
+		flex: 1;
+		min-width: 0;
+		padding: 0;
+		background: none;
+		border: none;
+		font: inherit;
+		font-size: 0.8125rem;
+		font-weight: 600;
+		color: var(--ngn-text-primary);
+		text-align: left;
+		cursor: pointer;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	&__body {
+		padding: 0.75rem 0.625rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	&__coords {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0.5rem;
+	}
+
+	&__add {
+		margin-top: var(--ngn-space-sm);
+	}
+}

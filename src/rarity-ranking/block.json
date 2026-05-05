@@ -1,0 +1,114 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "ngn/rarity-ranking",
+	"version": "0.1.0",
+	"title": "Rarity Ranking",
+	"category": "widgets",
+	"icon": "smiley",
+	"description": "Ranked list with accent colors, images, and click-to-expand details.",
+	"example": {
+		"attributes": {
+			"headline": "Ranked by rarity",
+			"subheadline": "From the merely uncommon to the genuinely once-in-a-lifetime.",
+			"items": [
+				{
+					"id": "ex-1",
+					"name": "Joseph",
+					"typeLabel": "Cotton Candy Claws",
+					"rarityStat": "1 in 100 million",
+					"imageUrl": "",
+					"imageAlt": "",
+					"donor": "",
+					"donorContext": "",
+					"donationDate": "",
+					"expandedNote": ""
+				},
+				{
+					"id": "ex-2",
+					"name": "Jackie",
+					"typeLabel": "Calico",
+					"rarityStat": "1 in 30 million",
+					"imageUrl": "",
+					"imageAlt": "",
+					"donor": "",
+					"donorContext": "",
+					"donationDate": "",
+					"expandedNote": ""
+				}
+			]
+		}
+	},
+	"attributes": {
+		"headline": {
+			"type": "string",
+			"default": "Ranked by rarity"
+		},
+		"subheadline": {
+			"type": "string",
+			"default": "From the merely uncommon to the genuinely once-in-a-lifetime."
+		},
+		"items": {
+			"type": "array",
+			"default": [
+				{
+					"id": "item-1",
+					"name": "Joseph",
+					"typeLabel": "Cotton Candy Claws",
+					"rarityStat": "1 in 100 million",
+					"imageUrl": "",
+					"imageAlt": "Joseph the cotton candy clawed lobster",
+					"donor": "Kevin Wolff",
+					"donorContext": "Little Harbor Lobster Co., Marblehead",
+					"donationDate": "November 2025",
+					"expandedNote": "Named after the biblical figure with a 'coat of many colors,' Joseph waves orange, blue, purple, green, and pink claws when he emerges from his rock cave."
+				},
+				{
+					"id": "item-2",
+					"name": "Jackie",
+					"typeLabel": "Calico",
+					"rarityStat": "1 in 30 million",
+					"imageUrl": "",
+					"imageAlt": "Jackie the calico lobster",
+					"donor": "Mike 'Tuffy' Tufts",
+					"donorContext": "Lobster boat captain, Nahant",
+					"donationDate": "October 2025",
+					"expandedNote": "Short for Jack O'Lantern, named for her orange and black coloration and her arrival near Halloween. The veteran lobster captain typically brings rare catches home in his lunchbox."
+				},
+				{
+					"id": "item-3",
+					"name": "Neptune",
+					"typeLabel": "Electric Blue",
+					"rarityStat": "1 in 2 million",
+					"imageUrl": "",
+					"imageAlt": "Neptune the blue lobster",
+					"donor": "Brad Myslinski",
+					"donorContext": "Sophia & Emma, Salem",
+					"donationDate": "July 2025",
+					"expandedNote": "The first rare lobster to arrive at the Marine Science Center, Neptune's brilliant cobalt color comes from a disrupted binding process between the blue pigment crustacyanin and the red pigment astaxanthin."
+				},
+				{
+					"id": "item-4",
+					"name": "Common Brown",
+					"typeLabel": "Standard American Lobster",
+					"rarityStat": "The other 99.9999%",
+					"imageUrl": "",
+					"imageAlt": "Standard greenish-brown lobster",
+					"donor": "",
+					"donorContext": "",
+					"donationDate": "",
+					"expandedNote": "The greenish-brown coloring of typical American lobsters serves as camouflage on the ocean floor. Their range extends from Cape Hatteras, North Carolina to Labrador, Canada — with New England having the highest concentration."
+				}
+			]
+		}
+	},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "ngn-demo",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

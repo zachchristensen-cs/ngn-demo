@@ -1,0 +1,169 @@
+.hero-block {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	color: #fff;
+	margin-bottom: clamp(1.5rem, 4vw, 3rem) !important;
+	// Breakout that defeats nested constrained layouts (where multiple
+	// wp-block-group ancestors each add padding/margin) without using
+	// `100vw`, which on browsers that reserve scrollbar gutter overflows
+	// the viewport and produces a horizontal scrollbar.
+	// `width: 100%` + symmetric negative margins to `calc(50% - 50vw)`
+	// re-anchors the element to the viewport edges. We keep the page-
+	// scrollbar gutter reserved with `scrollbar-gutter: stable` on the
+	// document root (set globally by the theme) so the math is exact;
+	// fall back to `max-width: 100%` to clip any rounding overflow.
+	width: 100% !important;
+	max-width: 100% !important;
+	margin-left: calc(50% - 50vw) !important;
+	margin-right: calc(50% - 50vw) !important;
+	box-sizing: border-box;
+
+	&__image {
+		position: absolute;
+		inset: 0;
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: center;
+		z-index: 0;
+	}
+
+	&__overlay {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		pointer-events: none;
+	}
+
+	&__content {
+		position: relative;
+		z-index: 2;
+		width: 100%;
+		max-width: 60rem;
+		padding: 4rem 5%;
+		text-align: center;
+	}
+
+	&__placeholder {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+	}
+
+	&__byline {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.75rem;
+		margin-top: 1.5rem;
+		text-align: left;
+		color: #fff;
+	}
+
+	&__byline-avatar {
+		width: 44px;
+		height: 44px;
+		border-radius: 50%;
+		object-fit: cover;
+		flex-shrink: 0;
+	}
+
+	&__byline-text {
+		display: flex;
+		flex-direction: column;
+		gap: 0.125rem;
+		line-height: 1.3;
+	}
+
+	&__byline-author {
+		font-size: 0.95rem;
+	}
+
+	&__byline-by {
+		opacity: 0.85;
+		margin-right: 0.25em;
+	}
+
+	&__byline-name {
+		font-weight: 700;
+	}
+
+	&__byline-date {
+		font-size: 0.85rem;
+		opacity: 0.85;
+	}
+
+	&__credit {
+		position: absolute;
+		left: 5%;
+		right: 5%;
+		bottom: 0.75rem;
+		z-index: 2;
+		font-size: 0.75rem;
+		line-height: 1.3;
+		text-align: center;
+		color: rgba(255, 255, 255, 0.85);
+		text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+	}
+}
+
+/*
+ * When a post uses the hero block, the template's title slot is empty
+ * (suppressed via render_block / the_title filters in ngn-demo.php).
+ * These rules suppress the visual gap left behind by:
+ *   - the empty post-title block element
+ *   - any wrapper Group / Spacer the template put around it
+ *   - the Post Content block's default top spacing
+ */
+body.has-hero-block {
+	// Float the theme's site header over the hero so the nav reads as
+	// part of the hero. The header is rendered by the theme's template
+	// part (outside this block's DOM), so we reach it via a body-scoped
+	// rule. `position: relative` on the site-blocks wrapper anchors the
+	// absolute header to the page, not the viewport — so it scrolls
+	// away naturally with the hero.
+	.wp-site-blocks {
+		position: relative;
+	}
+
+	.wp-site-blocks > header.wp-block-template-part {
+		position: absolute;
+		inset: 0 0 auto 0;
+		z-index: 10;
+		background: transparent;
+		color: #fff;
+
+		a {
+			color: #fff;
+		}
+	}
+
+	// The post title is suppressed by `the_title` / `render_block` filters
+	// in PHP; also hide it visually so any wrapper/margin it leaves
+	// behind collapses.
+	.wp-block-post-title {
+		display: none !important;
+	}
+
+	// Walk up the ancestor chain from the hero block and zero out top
+	// spacing on every container. The :has() selector catches arbitrarily
+	// nested wp-block-group / main wrappers, including ones with inline
+	// `style="padding-top:var(--wp--preset--spacing--60)"` from the
+	// template editor.
+	main:has(.hero-block),
+	.wp-site-blocks > *:has(.hero-block),
+	.wp-block-group:has(.hero-block),
+	.wp-block-post-content:has(.hero-block),
+	.entry-content:has(.hero-block) {
+		margin-top: 0 !important;
+		padding-top: 0 !important;
+	}
+
+	// Collapse any group block whose only meaningful child was the
+	// (now-suppressed) post title.
+	.wp-block-group:has(> .wp-block-post-title:only-child) {
+		display: none;
+	}
+}

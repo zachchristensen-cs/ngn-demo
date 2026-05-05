@@ -1,0 +1,155 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "ngn/hero",
+  "version": "0.1.0",
+  "title": "Hero",
+  "category": "design",
+  "icon": "cover-image",
+  "description": "Full-bleed hero with background image and customizable color or gradient overlay.",
+  "example": {
+    "attributes": {
+      "minHeight": 50,
+      "overlayType": "gradient",
+      "overlayOpacity": 1,
+      "overlayGradient": {
+        "angle": 180,
+        "stops": [
+          {
+            "id": "s1",
+            "color": "rgba(0, 0, 0, 0)",
+            "position": 0
+          },
+          {
+            "id": "s2",
+            "color": "rgba(0, 0, 0, 0.7)",
+            "position": 100
+          }
+        ]
+      },
+      "bylineAuthorName": "Jane Doe",
+      "bylineUsePostDate": false,
+      "bylineDate": "May 2026"
+    },
+    "innerBlocks": [
+      {
+        "name": "core/heading",
+        "attributes": {
+          "level": 1,
+          "content": "Hero headline",
+          "align": "center",
+          "style": {
+            "color": {
+              "text": "#ffffff"
+            }
+          }
+        }
+      },
+      {
+        "name": "core/paragraph",
+        "attributes": {
+          "content": "Subheading or supporting copy.",
+          "align": "center",
+          "style": {
+            "color": {
+              "text": "#ffffff"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "imageId": {
+      "type": "number"
+    },
+    "imageUrl": {
+      "type": "string"
+    },
+    "imageAlt": {
+      "type": "string",
+      "default": ""
+    },
+    "focalPoint": {
+      "type": "object",
+      "default": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "minHeight": {
+      "type": "number",
+      "default": 70
+    },
+    "overlayType": {
+      "type": "string",
+      "default": "color"
+    },
+    "overlayColor": {
+      "type": "string",
+      "default": "rgba(0, 0, 0, 0.5)"
+    },
+    "overlayGradient": {
+      "type": "object",
+      "default": {
+        "angle": 180,
+        "stops": [
+          {
+            "id": "s1",
+            "color": "rgba(0, 0, 0, 0)",
+            "position": 0
+          },
+          {
+            "id": "s2",
+            "color": "rgba(0, 0, 0, 0.7)",
+            "position": 100
+          }
+        ]
+      }
+    },
+    "overlayOpacity": {
+      "type": "number",
+      "default": 1
+    },
+    "bylineAuthorName": {
+      "type": "string",
+      "default": ""
+    },
+    "bylineAuthorImageId": {
+      "type": "number"
+    },
+    "bylineAuthorImageUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "bylineAuthorImageAlt": {
+      "type": "string",
+      "default": ""
+    },
+    "bylineDate": {
+      "type": "string",
+      "default": ""
+    },
+    "bylineUsePostDate": {
+      "type": "boolean",
+      "default": true
+    },
+    "imageCredit": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "supports": {
+    "html": false,
+    "align": [
+      "full",
+      "wide"
+    ],
+    "anchor": true
+  },
+  "textdomain": "ngn-demo",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "render": "file:./render.php"
+}
